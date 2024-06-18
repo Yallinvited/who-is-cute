@@ -13,8 +13,8 @@
         }
         #container {
             position: relative;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             overflow: hidden;
         }
         #underImage {
@@ -23,7 +23,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* Dostosowanie obrazka */
             opacity: 0; /* Ukryj obrazek na początku */
             transition: opacity 0.3s ease; /* Dodany efekt przejścia */
         }
@@ -51,8 +51,8 @@
         let isDrawing = false;
 
         function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            canvas.width = document.getElementById('container').clientWidth;
+            canvas.height = document.getElementById('container').clientHeight;
             drawTopImage(); // Rysuj obrazek na wierzchu po zmianie rozmiaru
         }
 
@@ -60,9 +60,9 @@
             const img = new Image();
             img.src = topImageSrc;
             img.onload = function() {
-                let scale = Math.max(canvas.width / img.width, canvas.height / img.height);
-                let x = (canvas.width / 2) - (img.width / 2) * scale;
-                let y = (canvas.height / 2) - (img.height / 2) * scale;
+                let scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+                let x = (canvas.width - img.width * scale) / 2;
+                let y = (canvas.height - img.height * scale) / 2;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
                 ctx.globalCompositeOperation = 'destination-out';
@@ -127,6 +127,7 @@
     </script>
 </body>
 </html>
+
 
 
 
